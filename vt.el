@@ -19,6 +19,22 @@
 ;;
 ;;; Code:
 
+(require 'json)
+
+
+;; Hardcode /vt/ here
+;; https://github.com/4chan/4chan-API/blob/master/pages/Threadlist.md
+;; List of all threads in board
+(defvar vt-url "https://a.4cdn.org/vt/threads.json")
+
+(defun vt-read-json-from-url (url)
+  "Get json from url"
+  (with-current-buffer
+      (url-retrieve-synchronously url)
+    (goto-char (point-min))
+    (search-forward "\n\n")
+    (json-read)))
+
 
 
 (provide 'vt)
