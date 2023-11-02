@@ -78,6 +78,12 @@
 ;;                                (insert (vt-post-to-markdown post)))))
 
 
+;;;  Things left to do:
+;;;  1. Image support
+;;;  2. Show something else instead of nil in titles
+;;;  3. Prettier titles
+;;;  4. More info in headers. Tripcodes, etc.
+
 (defvar vt-thread-list (vt-read-json-from-url vt-url))
 (defvar vt-post-ids '())
 (vt-with-thread vt-thread-list
