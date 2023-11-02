@@ -28,13 +28,18 @@
 (defvar vt-url "https://a.4cdn.org/vt/threads.json")
 
 (defun vt-read-json-from-url (url)
-  "Get json from url"
+  "Get json from url and return it"
   (with-current-buffer
       (url-retrieve-synchronously url)
     (goto-char (point-min))
     (search-forward "\n\n")
     (json-read)))
 
+(defvar vt-thread-list (vt-read-json-from-url vt-url))
+
+(with-current-buffer (get-buffer-create "*test*") (insert (format "%s"  (aref vt-thread-list 0))))
+
+;; (assoc 'no (aref (cdr (assoc 'threads (aref vt-thread-list 0))) 2))
 
 
 (provide 'vt)
