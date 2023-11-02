@@ -39,7 +39,18 @@
 
 (with-current-buffer (get-buffer-create "*test*") (insert (format "%s"  (aref vt-thread-list 0))))
 
-;; (assoc 'no (aref (cdr (assoc 'threads (aref vt-thread-list 0))) 2))
+(setq page-number 0 thread-number 2)
+(assoc 'no (aref
+            (cdr (assoc 'threads (aref vt-thread-list page-number))) thread-number))
+
+(defun vt-with-thread (thread-vec go)
+  "Call go for each thread in thread-vec"
+  (dotimes (index (length thread-vec))
+    (let ((v-threads-on-page (cdr (assoc 'threads (aref vt-thread-list index)))))
+      (dotimes (thread-index (length v-threads-on-page))
+        (let ((thread (aref v-threads-on-page thread-index))) (funcall go thread))))))
+
+(vt-get-thread-nos vt-thread-list (lambda (x) (insert (format "%s\n" (assoc 'no x)))))
 
 
 (provide 'vt)
