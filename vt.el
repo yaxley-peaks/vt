@@ -225,8 +225,8 @@
 (defvar vt/temp-buf (get-buffer-create "*posts*"))
 (vt-with-post vt-post-list (lambda (post)
                              (with-current-buffer vt/temp-buf
-                               (insert (vt-post-to-markdown post))
-                               (insert "\n\n"))))
+                               (insert (vt-post-to-markdown post)))))
+
 
 ;; (cdr (assoc 'sub (aref (cdar vt-post-list) 0)))
 
