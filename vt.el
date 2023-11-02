@@ -37,8 +37,7 @@
 
 (defvar vt-thread-list (vt-read-json-from-url vt-url))
 
-;; (with-current-buffer (get-buffer-create "*test*") (insert (format "%s"  (aref vt-thread-list 0))))
-
+;;
 ;; (setq page-number 0 thread-number 2)
 ;; (assoc 'no (aref
 ;;             (cdr (assoc 'threads (aref vt-thread-list page-number))) thread-number))
@@ -50,7 +49,16 @@
       (dotimes (thread-index (length v-threads-on-page))
         (let ((thread (aref v-threads-on-page thread-index))) (funcall go thread))))))
 
-;; (vt-get-thread-nos vt-thread-list (lambda (x) (insert (format "%s\n" (assoc 'no x)))))
+;; (vt-with-thread vt-thread-list (lambda (x) (insert (format "%s\n" (assoc 'no x)))))
+
+(defvar thread-id "1")
+(defvar vt-thread-url (concat "https://a.4cdn.org/vt/thread/" thread-id ".json"))
+
+
+(defvar vt-post-list (vt-read-json-from-url vt-thread-url))
+(with-current-buffer (get-buffer-create "*test*") (insert (format "%s"  vt-post-list)))
+
+
 
 
 (provide 'vt)
