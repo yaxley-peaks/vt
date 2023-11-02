@@ -98,7 +98,8 @@
                                                        (lambda (post) (insert (vt-post-to-markdown post)))))))))
 
 
-
+;;; M-x eval-buffer will give you a buffer called *vt-posts*
+(vt-all-threads-to-markdown vt-post-ids)
 
 ;; (cdr (assoc 'sub (aref (cdar vt-post-list) 0)))
 
