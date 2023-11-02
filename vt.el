@@ -28,7 +28,7 @@
 (defvar vt-url "https://a.4cdn.org/vt/threads.json")
 
 (defun vt-read-json-from-url (url)
-  "Get json from url and return it"
+  "Get json from URL and return it."
   (with-current-buffer
       (url-retrieve-synchronously url)
     (goto-char (point-min))
@@ -44,7 +44,7 @@
 ;;             (cdr (assoc 'threads (aref vt-thread-list page-number))) thread-number))
 
 (defun vt-with-thread (thread-vec go)
-  "Call go for each thread in thread-vec"
+  "Call GO for each thread in THREAD-VEC."
   (dotimes (index (length thread-vec))
     (let ((v-threads-on-page (cdr (assoc 'threads (aref vt-thread-list index)))))
       (dotimes (thread-index (length v-threads-on-page))
