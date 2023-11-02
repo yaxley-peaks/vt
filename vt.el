@@ -56,10 +56,16 @@
 
 
 (defvar vt-post-list (vt-read-json-from-url vt-thread-url))
-(with-current-buffer (get-buffer-create "*test*") (insert (format "%s"  vt-post-list)))
 
+(cdr (assoc 'com (aref (cdar vt-post-list) 0)))
 
+(defun vt-post-to-markdown (post)
+  "Convert POST to markdown."
+  (let ((title (cdr (assoc 'sub post)))
+        (body (cdr (assoc 'com post))))
+    (format "# %s\n\n%s" title body)))
 
+(with-current-buffer (get-buffer-create "*test*") (insert (vt-post-to-markdown (aref (cdar vt-post-list) 0))))
 
 (provide 'vt)
 ;;; vt.el ends here
