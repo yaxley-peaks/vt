@@ -35,12 +35,6 @@
     (search-forward "\n\n")
     (json-read)))
 
-
-;;
-;; (setq page-number 0 thread-number 2)
-;; (assoc 'no (aref
-;;             (cdr (assoc 'threads (aref vt-thread-list page-number))) thread-number))
-
 (defun vt-with-thread (thread-vec go)
   "Call GO for each thread in THREAD-VEC."
   (dotimes (index (length thread-vec))
@@ -48,34 +42,24 @@
       (dotimes (thread-index (length v-threads-on-page))
         (let ((thread (aref v-threads-on-page thread-index))) (funcall go thread))))))
 
-;; (vt-with-thread vt-thread-list (lambda (x) (insert (format "%s\n" (assoc 'no x)))))
-
 (defun vt-with-post (post-list go)
-  "Call GO for each post in POST-VEC."
+  "Call GO for each post in POST-LIST."
   (let ((posts (cdar post-list)))
     (dotimes (index (length posts))
       (funcall go (aref posts index)))))
 
 (defun vt-post-to-markdown (post)
   "Convert POST to markdown."
-  (let ((title (cdr (assoc 'sub post)))
-        (body (cdr (assoc 'com post)))
-        (no (cdr (assoc 'no post)))
-        (is-op (zerop (cdr (assoc 'resto post)))))
+  (let* ((title (cdr (assoc 'sub post)))
+         (body (cdr (assoc 'com post)))
+         (no (cdr (assoc 'no post)))
+         (is-op (zerop (cdr (assoc 'resto post))))
+         (image-name (cdr (assoc 'tim post)))
+         (image-ext (cdr (assoc 'ext post)))
+         (image-url (format "https://i.4cdn.org/vt/%s%s" image-name image-ext)))
     (if is-op
-        (format "# %s -- (%s)\n\n%s\n\n" title no body)
-      (format "## %s -- (%s)\n\n%s\n\n" title no body))))
-
-;; (defvar thread-id "61793192")
-;; (defvar vt-thread-url (concat "https://a.4cdn.org/vt/thread/" thread-id ".json"))
-
-
-;; (defvar vt-post-list (vt-read-json-from-url vt-thread-url))
-
-;; (defvar vt/temp-buf (get-buffer-create "*posts*"))
-;; (vt-with-post vt-post-list (lambda (post)
-;;                              (with-current-buffer vt/temp-buf
-;;                                (insert (vt-post-to-markdown post)))))
+        (format "# %s -- (%s)\n\n![](%s)\n\n%s\n\n" title no image-url body)
+      (format "## %s -- (%s)\n\n![](%s)\n\n%s\n\n" title no image-url body))))
 
 
 ;;;  Things left to do:
@@ -89,7 +73,7 @@
 (vt-with-thread vt-thread-list
                 (lambda (thread) (setq! vt-post-ids (cons (cdr (assoc 'no thread)) vt-post-ids))))
 (defun vt-all-threads-to-markdown (thread-id-list)
-  "THREAD-ID-LIST is a list of integers"
+  "THREAD-ID-LIST is a list of integers."
   (let ((temp-buffer (get-buffer-create "*vt-posts*"))
         (posts-url "https://a.4cdn.org/vt/thread/"))
     (dolist (post-id thread-id-list)
@@ -101,14 +85,6 @@
 ;;; M-x eval-buffer will give you a buffer called *vt-posts*
 (vt-all-threads-to-markdown vt-post-ids)
 
-;; (cdr (assoc 'sub (aref (cdar vt-post-list) 0)))
-
-
-;; (vt-all-threads-to-markdown vt-post-ids)
-
-
-;; (with-current-buffer (get-buffer-create "*test*")
-;;   (insert (vt-post-to-markdown (aref (cdar vt-post-list) 0))))
 
 (provide 'vt)
 ;;; vt.el ends here
