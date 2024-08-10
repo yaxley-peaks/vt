@@ -38,7 +38,7 @@
 (defun vt-with-thread (thread-vec go)
   "Call GO for each thread in THREAD-VEC."
   (dotimes (index (length thread-vec))
-    (let ((v-threads-on-page (cdr (assoc 'threads (aref vt-thread-list index)))))
+    (let ((v-threads-on-page (cdr (assoc 'threads (aref thread-vec index)))))
       (dotimes (thread-index (length v-threads-on-page))
         (let ((thread (aref v-threads-on-page thread-index))) (funcall go thread))))))
 
@@ -56,14 +56,14 @@
          (is-op (zerop (cdr (assoc 'resto post))))
          (image-name (cdr (assoc 'tim post)))
          (image-ext (cdr (assoc 'ext post)))
-         (image-url (format "https://i.4cdn.org/vt/%s%s" image-name image-ext)))
+         (image-url (if image-name (format "https://i.4cdn.org/vt/%s%s" image-name image-ext) "")))
     (if is-op
         (format "# %s -- (%s)\n\n![](%s)\n\n%s\n\n" title no image-url body)
       (format "## %s -- (%s)\n\n![](%s)\n\n%s\n\n" title no image-url body))))
 
 
 ;;;  Things left to do:
-;;;  1. Image support
+;;;  1. [X] Image support
 ;;;  2. Show something else instead of nil in titles
 ;;;  3. Prettier titles
 ;;;  4. More info in headers. Tripcodes, etc.
